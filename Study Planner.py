@@ -7,6 +7,7 @@ root.title("My Study Planner")
 
 main_frame = Frame(root, height=100, width=500)
 intro = Label(main_frame, text="Welcome to My Study Planner")
+print("hi")
 
 
 root.mainloop()
