@@ -4,43 +4,35 @@
 from tkinter import *
 from tkinter import ttk
 
-root = Tk()
-root.title("My Study Planner")
-root.geometry('350x500')
-main_frame = Frame(root, height=150, width=100)
-main_frame.pack()
+def main():
+    root = Tk()
+    app = Main(root)
 
-intro = Label(main_frame, text="Welcome to My Study Planner")
-intro.pack(side=TOP, padx=5, pady=5)
+class Main:
+    def __init__(self, master):
+        self.master =master
+        self.master.title("My Study Planner")
+        self.geometry('350x500')
+        self.master.config(bg='light yellow')
+        self.frame = Frame(self.master, height=150, width=100, bg='light yellow')
+        self.frame.pack()
 
-
-
-# Fuction to open new window on button click
-def g_create_page():
-    goals_page = Toplevel(root)
-    goals_page.geometry('350x500')
-    goals_page.title("Goals")
-    goals_page.grabset()
+        self.intro = Label(main_frame, text="Welcome to My Study Planner")
+        self.intro.pack(side=TOP, padx=5, pady=5)
 
 
-def c_create_page():
-    calendar_page = Toplevel(root)
-    calendar_page.geometry('350x500')
-    calendar_page.title("Calendar")
-    calendar_page.grab_set()
+    def new_window(self):
+        self.newWindow = Toplevel(self.master)
+        self.app = goals_window(self.newWindow)
 
-def d_create_page():
-    deadlines_page = Toplevel(root)
-    deadlines_page.geometry()
-    deadlines_page.title("Deadlines")
-    deadlines_page.grab_set()
-
-class new_window():
-   def __init__(self, page, title):
-       self.page = page
-       self.title = title
-       self.grab_set()
-       self.geometry('350x500')
+class Goals:
+    def __init__(self, master):
+        self.master =master
+        self.master.title("Goals Page")
+        self.geometry('350x500')
+        self.master.config(bg='light yellow')
+        self.frame = Frame(self.master, height=150, width=100, bg='light yellow')
+        self.frame.pack()
 
 
 
@@ -49,20 +41,3 @@ class new_window():
 
 
 
-
-
-
-calendar_button = Button(main_frame, text="Calendar", bg="lightblue", command=c_create_page)
-calendar_button.pack(padx=5, pady=5)
-
-goals_button = Button(main_frame, text="Goals", bg="lightblue", command=g_create_page)
-goals_button.pack(padx=5, pady=5)
-
-deadline_button = Button(main_frame, text="Deadlines", bg="lightblue", command=d_create_page)
-deadline_button.pack(padx=5, pady=5)
-buttons = [deadline_button, calendar_button, goals_button]
-
-back_button = Button(root, text="Back", bg="lightblue")
-back_button.place(x=10, y=470)
-
-root.mainloop()
