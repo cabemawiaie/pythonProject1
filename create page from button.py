@@ -23,7 +23,7 @@ class Menu:
         self.intro = Label(self.frame, text="Welcome to My Study Planner", font=('MS Sans Serif', 10, 'bold'), bg='yellow1')
         self.intro.pack(side=TOP)
 
-     #==================================Buttons=======================================================================
+        # Buttons
         self.btnGoals = Button(self.frame, text="Goals", bg="lightblue", padx=5, pady=5, command=self.goal_page)
         self.btnGoals.pack()
 
@@ -41,9 +41,8 @@ class Menu:
         #self.btnExit.place(x=10, y=470)x
 
 
-#==================================Buttons=======================================================================
 
-#==================================Button Functions==============================================================
+    # Button FunctionS
     def goal_page(self):
         self.newWindow = Toplevel(self.master)
         self.app = goalWindow(self.newWindow)
@@ -63,7 +62,7 @@ class Menu:
         else:
             command = self.new_window
             return
-#==================================Button Functions==============================================================
+
 
 class goalWindow:
     def __init__(self, master):
@@ -86,14 +85,17 @@ class goalWindow:
         self.my_entry.pack(pady=20)
         self.btn_frame = Frame(self.master)
         self.btn_frame.pack(pady=20)
+        # Functions for goal buttons
+
+        # Goal Buttons
         self.btnDelete = Button(self.btn_frame, text="Delete goal", command=delete_goal)
         self.btnAdd = Button(self.btn_frame, text="Add goal", command=add_goal)
         self.btnCross = Button(self.btn_frame, text="Cross off goal", command=cross_goal)
         self.btnUncross = Button(self.btn_frame, text="Uncross goal", command=uncross_goal)
         self.btnDelete.pack()
-        self.btnDelete.pack()
-         self.btnDelete.pack()
-         self.btnDelete.pack()
+        self.btnAdd.pack(padx=20)
+        self.btnCross.pack()
+        self.btnUncross.pack(padx=20)
 
 
 class calendarWindow:
