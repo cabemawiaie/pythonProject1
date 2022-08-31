@@ -1,6 +1,7 @@
 # This will import all the widgets
 # and modules which are available in
 # tkinter and ttk module
+import tkinter
 from tkinter import *
 from tkinter import ttk
 
@@ -71,7 +72,29 @@ class goalWindow:
         self.master.geometry('350x500')
         self.master.config(bg='light yellow')
         self.frame = Frame(self.master, bg='light yellow')
-        self.frame.pack()
+        self.frame.pack(pady=10)
+        self.user_goals = Listbox(self.frame, width=25, height=5, highlightthicknes=0, selectbackground='#a6a6a6', activestyle="none")
+        self.user_goals.pack(side=LEFT, fill=BOTH)
+        self.goals_list = []
+        for goal in self.goals_list:
+            self.goals_list.insert(END, goal)
+        self.my_scrollbar = Scrollbar(self.frame)
+        self.my_scrollbar.pack(side=RIGHT, fill=BOTH)
+        self.goals_list.config(yscrollcommand=self.my_scrollbar.set)
+        self.my_scrollbar.config(command=self.goals.yview)
+        self.my_entry = Entry(self.master)
+        self.my_entry.pack(pady=20)
+        self.btn_frame = Frame(self.master)
+        self.btn_frame.pack(pady=20)
+        self.btnDelete = Button(self.btn_frame, text="Delete goal", command=delete_goal)
+        self.btnAdd = Button(self.btn_frame, text="Add goal", command=add_goal)
+        self.btnCross = Button(self.btn_frame, text="Cross off goal", command=cross_goal)
+        self.btnUncross = Button(self.btn_frame, text="Uncross goal", command=uncross_goal)
+        self.btnDelete.pack()
+        self.btnDelete.pack()
+         self.btnDelete.pack()
+         self.btnDelete.pack()
+
 
 class calendarWindow:
     def __init__(self, master):
