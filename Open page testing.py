@@ -3,129 +3,86 @@
 # tkinter and ttk module
 import tkinter
 from tkinter import *
+import tkinter as tk
 from tkinter import ttk
 
 
-def main():
-    root = Tk()
-    app = Main(root)
-    root.mainloop()
+
+# need to explain class
+class StudyApp(tk.Tk):
+    def __init__(self, *args, **kwargs):
+        tk.Tk.__init__(self, *args, **kwargs)
+        # the container is where we'll stack a bunch of frames
+        # on top of each other, then the one we want visible
+        # will be raised above the others
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
+
+        self.frames = {}
+
+        for F in (Main, GoalPage, ToDoPage):
+            page_name = F.__name__
+            frame = F(parent=container, controller=self)
+            self.frames[page_name] = frame
+            frame.winfo_geometry('350x500')
+
+            # put all of the pages in the same location;
+            # the one on the top of the stacking order
+            # will be the one that is visible.
+            frame.grid(row=0, column=0, sticky="nsew")
+        self.show_frame(Main)
+
+    def show_frame(self, page_name):
+        # Show window for the given page name
+        frame = self.frames[page_name]
+        frame.tkraise()
 
 
-class Main:
-    def __init__(self, master, controller):
-        ttk.Frame.__init__(self, master)
-        self.master = master
-        self.master.geometry('350x500')
-        self.master.title("Main Page")
-
-        label = ttk.Label(self, text="My Study Planner", font=('MS Sans Serif', 10, 'bold'))
-        label.pack(pady=10, padx=10)
+class Main(ttk.Frame):
+    def __init__(self, parent, controller):
+        ttk.Frame.__init__(self, parent)
+        self.controller = controller
+        label = ttk.Label(self, text="Main Page", font=('MS Sans Serif', 10, 'bold'))
+        label.pack(padx=10, pady=10)
 
         # Buttons
-        btn_goals = ttk.Button(self, text="Goals", padx=5, pady=5, command=lambda: controller.show_frame(GoalsPage))
+        btn_goals = ttk.Button(self, text="Goals", padx=5, pady=5, command=lambda: controller.show_frame(GoalPage))
         btn_goals.pack()
 
-        btn_calendar = ttk.Button(self, text="Calendar", padx=5, pady=5, command=lambda: controller.show_frame(GoalsPage))
-        btn_calendar.pack()
-
-        btn_deadline = ttk.Button(self, text="Deadlines", padx=5, pady=5,  command=lambda: controller.show_frame(GoalsPage))
-        btn_deadline.pack()
-
-        btn_exit = ttk.Button(self, text="Exit", padx=5, pady=5, command=lambda: controller.show_frame(GoalsPage))
-        btn_exit.place(x=10, y=460)
+        btn_calendar = ttk.Button(self, text="Calendar",
+                                  command=lambda: controller.show_frame(ToDoPage))
+        btn_calendar.pack(padx=5, pady=5)
 
         # self.btnExit = Button(goalWindow(self.newWindow), text="Exit", bg="lightblue")
         # self.btnExit.place(x=10, y=470)x
 
-    # Button FunctionS
 
-
-    def calendar_page(self):
-        self.newWindow = Toplevel(self.master)
-        self.app = CalendarWindow(self.newWindow)
-
-    def deadline_page(self):
-        self.newWindow = Toplevel(self.master)
-        self.app = DeadlineWindow(self.newWindow)
-
-    def exit(self):
-        self.Exit = tkinter.messagebox.askyesno("Exit confirmation", "Confirm if you want to exit")
-        if self.Exit > 0:
-            self.master.destroy()
-        else:
-            command = self.new_window
-        return
-
-
-class GoalPage:
-    def __init__(self, master, controller):
-        ttk.Frame.__init__(self, master)
-        label = ttk.Label(self, text="My Study Planner", font=('MS Sans Serif', 10, 'bold'))
+class GoalPage(ttk.Frame):
+    def __init__(self, parent, controller):
+        ttk.Frame.__init__(self, parent)
+        self.controller = controller
+        label = ttk.Label(self, text="Your Goals", font=('MS Sans Serif', 10, 'bold'))
         label.pack(pady=10, padx=10)
-        self.master = master
-        self.master.title("Your Goals")
-        self.master.geometry('350x500')
-        self.master.config(bg='light blue')
-        self.frame = Frame(self.master, bg='light blue')
-        self.frame.pack(pady=10)
-        self.userGoals = Listbox(self.frame, width=25, height=5, highlightthicknes=0, selectbackground='#a6a6a6',
-                                 activestyle="none")
-        self.userGoals.pack(side=LEFT, fill=BOTH)
-        self.goals_list = []
-        for goal in self.goals_list:
-            self.goals_list.insert(END, goal)
-        self.myScrollbar = Scrollbar(self.frame)
-        self.myScrollbar.config(command=self.goal.yview)
-        self.myScrollbar.pack(side=RIGHT, fill=BOTH)
-        self.goals_list.config(yscrollcommand=self.myScrollbar.set)
-        self.myEntry = Entry(self.master)
-        self.myEntry.pack(pady=20)
-        self.btnFrame = Frame(self.master)
-        self.btnFrame.pack(pady=20)
-        # Goal Buttons
-        self.btnDelete = Button(self.btn_frame, text="Delete goal", command=self.delete_goal)
-        self.btnAdd = Button(self.btn_frame, text="Add goal", command=self.add_goal)
-        self.btnCross = Button(self.btn_frame, text="Cross off goal", command=self.cross_goal)
-        self.btnUncross = Button(self.btn_frame, text="Uncross goal", command=self.uncross_goal)
-        self.btnDelete.pack()
-        self.btnAdd.pack(padx=20)
-        self.btnCross.pack()
-        self.btnUncross.pack(padx=20)
 
-    # Functions for goal buttons
-    def delete_goal(self):
-        self.goals_list.delete(ANCHOR)
-
-    def add_goal(self):
-        self.goals_list.insert(END, self.myEntry.get())
-        self.myEntry.delete(0, END)
-
-    def cross_goal(self):
-        pass
-
-    def uncross_goal(self):
-        pass
+        btn_exit = ttk.Button(self, text="Back to Main Page",
+                              command=lambda: controller.show_frame(Main))
+        btn_exit.place(x=10, y=460, padx=5, pady=5)
 
 
-class CalendarWindow:
-    def __init__(self, master):
-        self.master = master
-        self.master.title("Calendar")
-        self.master.geometry('350x500')
-        self.master.config(bg='light yellow')
-        self.frame = Frame(self.master, bg='light yellow')
-        self.frame.pack()
+class ToDoPage(ttk.Frame):
+    def __init__(self, parent, controller):
+        ttk.Frame.__init__(self, parent)
+        self.controller = controller
+        label = ttk.Label(self, text="To Do List", font=('MS Sans Serif', 10, 'bold'))
+        label.pack(pady=10, padx=10)
+
+        btn_exit = ttk.Button(self, text="Back to Main Page",
+                              command=lambda: controller.show_frame(Main))
+        btn_exit.place(x=10, y=460)
 
 
-class DeadlineWindow:
-    def __init__(self, master):
-        self.master = master
-        self.master.title("Deadlines")
-        self.master.geometry('350x500')
-        self.master.config(bg='light yellow')
-        self.frame = Frame(self.master, bg='light yellow')
-        self.frame.pack()
-
-
-main()
+if __name__ == "main":
+    app = StudyApp()
+    app.mainloop()
