@@ -8,13 +8,21 @@ import tkinter as tk
 class StudyApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+
+        width = 350
+        height = 500
+
+        self.geometry(f'{width}x{height}')
+        self.minsize(350, 500)
+
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
         # will be raised above the others
-        container = tk.Frame(self)
+        container = tk.Frame(self, width=350, height=500)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
+        container.grid_propagate(0)
 
         self.frames = {}
 
@@ -52,7 +60,7 @@ class Main(tk.Frame):
     def bigger(self):
         x = self.parent.winfo_height() + 350
         y = self.parent.winfo_width() + 500
-        self.parent.geometry(f'{y}x{x}')
+
         # self.btnExit = Button(goalWindow(self.newWindow), text="Exit", bg="lightblue")
         # self.btnExit.place(x=10, y=470)x
 
@@ -66,11 +74,6 @@ class GoalPage(tk.Frame):
         btn_exit = tk.Button(self, text="Back to Main Page",
                              command=lambda: controller.show_frame(Main))
         btn_exit.place(x=10, y=460)
-
-    def bigger(self):
-        x = self.parent.winfo_height() + 350
-        y = self.parent.winfo_width() + 500
-        self.parent.geometry(f'{y}x{x}')
 
 
 class ToDoPage(tk.Frame):
