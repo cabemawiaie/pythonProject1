@@ -37,7 +37,7 @@ class StudyApp(tk.Tk):
 class Main(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        self.controller = controller
+        self.parent = parent
         label = tk.Label(self, text="Main Page", font=('MS Sans Serif', 10, 'bold'))
         label.pack(padx=10, pady=10)
 
@@ -49,14 +49,17 @@ class Main(tk.Frame):
                               command=lambda: controller.show_frame(ToDoPage))
         btn_to_do.pack()
 
+    def bigger(self):
+        x = self.parent.winfo_height() + 350
+        y = self.parent.winfo_width() + 500
+        self.parent.geometry(f'{y}x{x}')
         # self.btnExit = Button(goalWindow(self.newWindow), text="Exit", bg="lightblue")
         # self.btnExit.place(x=10, y=470)x
 
 
 class GoalPage(tk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
+        tk.Frame.__init__(self, parent, height=500, width=350)
         label = tk.Label(self, text="Your Goals", font=('MS Sans Serif', 10, 'bold'))
         label.pack(pady=10, padx=10)
 
@@ -64,11 +67,15 @@ class GoalPage(tk.Frame):
                              command=lambda: controller.show_frame(Main))
         btn_exit.place(x=10, y=460)
 
+    def bigger(self):
+        x = self.parent.winfo_height() + 350
+        y = self.parent.winfo_width() + 500
+        self.parent.geometry(f'{y}x{x}')
+
 
 class ToDoPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        self.controller = controller
         label = tk.Label(self, text="To Do List", font=('MS Sans Serif', 10, 'bold'))
         label.pack(pady=10, padx=10)
 
@@ -76,7 +83,12 @@ class ToDoPage(tk.Frame):
                              command=lambda: controller.show_frame(Main))
         btn_exit.place(x=10, y=460)
 
+    def bigger(self):
+        x = self.parent.winfo_height() + 350
+        y = self.parent.winfo_width() + 500
+        self.parent.geometry(f'{y}x{x}')
 
-if __name__ == "main":
+
+if __name__ == "__main__":
     app = StudyApp()
     app.mainloop()
