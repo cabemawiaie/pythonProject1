@@ -1,7 +1,8 @@
-# This will import all the widgets
-# and modules which are available in
-# tkinter and ttk module
+# importing required modules
 import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
+import sqlite3 as sql
 
 
 # need to explain class
@@ -14,6 +15,7 @@ class StudyApp(tk.Tk):
 
         self.geometry(f'{width}x{height}')
         self.minsize(350, 500)
+        self.title('My Study Planner')
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -57,13 +59,6 @@ class Main(tk.Frame):
                               command=lambda: controller.show_frame(ToDoPage))
         btn_to_do.pack()
 
-    def bigger(self):
-        x = self.parent.winfo_height() + 350
-        y = self.parent.winfo_width() + 500
-
-        # self.btnExit = Button(goalWindow(self.newWindow), text="Exit", bg="lightblue")
-        # self.btnExit.place(x=10, y=470)x
-
 
 class GoalPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -86,12 +81,85 @@ class ToDoPage(tk.Frame):
                              command=lambda: controller.show_frame(Main))
         btn_exit.place(x=10, y=460)
 
-    def bigger(self):
-        x = self.parent.winfo_height() + 350
-        y = self.parent.winfo_width() + 500
-        self.parent.geometry(f'{y}x{x}')
+        # widgets for to do list
+        task_label = tk.Label(self, text='Enter the Task')
+        task_label.place(x=0, y=0)
+
+        task_field = tk.Entry(self, width=18)
+        task_field.place(x=30, y=30)
+
+        btn_add = tk.Button(self, text='Add Task', command=self.add_task)
+        btn_del = tk.Button(self, text='Delete', command=self.delete_task)
+        btn_del_all = tk.Button(self, text='Delete All Tasks', command=self.delete_all_tasks)
+
+        self.tasks = []
+
+        task_listbox = tk.Listbox(self, width=26, height=13)
+
+        # setting position of the widgets in app using place() method
+        btn_add.place(x=30, y=120)
+        btn_del.place(x=30, y=160)
+        btn_del_all.place(x=30, y=200)
+        task_listbox.place(x=30, y=240)
+
+        self.retrieve_database()
+        self.update_list()
+
+    # Functions for buttons
+    # Add tasks to to-do list
+    def add_task(self, the_cursor=None):
+        task_string = self.task_field.get()
+        if len(task_string) == 0:
+            messagebox.showinfo('Error', 'Please enter a task')
+        else:
+            self.tasks.append(task_string)
+            the_cursor.execute('insert into tasks values (?)', (task_string,))
+            self.update_list()
+            self.task_field.delete(0, 'end')
+
+    # Update task list
+    def update_list(self):
+        self.clear_list()
+        for task in self.tasks:
+            self.task_listbox.insert('end', task)
+
+    # Delete task from to-do list
+    def delete_task(self, the_cursor=None):
+        try:
+            the_value = self.task_listbox.get(self.task_listbox.curselection())
+            if the_value in self.tasks:
+                self.tasks.remove(the_value)
+                self.update_list()
+                the_cursor.execute('delete from tasks where title = ?', (the_value,))
+        except:
+            messagebox.showinfo('Error', 'No Task Selected. Cannot Delete')
+
+    def delete_all_tasks(self, the_cursor=None):
+        message_box = messagebox.askyesno('Delete All', 'Are you sure?')
+        if message_box:
+            while len(self.tasks) != 0:
+                self.tasks.pop()
+            the_cursor.execute('delete from tasks')
+            self.update_list()
+
+    def clear_list(self):
+        self.task_listbox.delete(0, 'end')
+
+    def retrieve_database(self, the_cursor=None):
+        while len(self.tasks) != 0:
+            self.tasks.pop()
+        for row in the_cursor.execute('select title from tasks'):
+            self.tasks.append(row[0])
 
 
 if __name__ == "__main__":
     app = StudyApp()
     app.mainloop()
+
+    the_connection = sql.connect('listOfTasks.db')
+    the_cursor = the_connection.cursor()
+    the_cursor.execute('create table if not exists tasks (title text)')
+
+    the_connection.commit()
+    the_cursor.close()
+
