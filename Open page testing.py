@@ -1,8 +1,7 @@
 # importing required modules
 import tkinter as tk
-from tkinter import ttk
+from tkinter import *
 from tkinter import messagebox
-import sqlite3 as sql
 
 
 # need to explain class
@@ -65,10 +64,50 @@ class GoalPage(tk.Frame):
         tk.Frame.__init__(self, parent, height=500, width=350)
         label = tk.Label(self, text="Your Goals", font=('MS Sans Serif', 10, 'bold'))
         label.pack(pady=10, padx=10)
-
         btn_exit = tk.Button(self, text="Back to Main Page",
                              command=lambda: controller.show_frame(Main))
         btn_exit.place(x=10, y=460)
+        self.goal_list = ['Enter you goals here']
+
+        # widgets for goal list
+        self.my_entry = tk.Entry(self)
+
+        self.goal_listbox = tk.Listbox(self, width=25, height=10, activestyle='none')
+
+        btn_add = tk.Button(self, text='Add Goal', command=self.add_goal)
+        btn_del = tk.Button(self, text='Delete', command=self.delete_goal)
+        btn_del_all = tk.Button(self, text='Delete All Goals', command=self.delete_all_goals)
+
+        # setting position of the widgets in app
+        btn_add.place(x=30, y=120)
+        btn_del.place(x=30, y=160)
+        btn_del_all.place(x=30, y=200)
+        self.goal_listbox.place(x=145, y=130)
+        self.my_entry.pack(pady=20)
+
+        for goal in self.goal_list:
+            self.goal_listbox.insert(END, goal)
+
+    # Functions for button
+
+    # Add tasks to to-do list
+    def add_goal(self):
+        task = self.my_entry.get()
+        if task != "":
+            self.goal_listbox.insert(END, task)
+            self.my_entry.delete(0, 'end')
+        else:
+            messagebox.showinfo('Error', 'Please enter a goal')
+
+    # Delete task from to-do list
+    def delete_goal(self):
+        self.goal_listbox.delete(ANCHOR)
+
+    def delete_all_goals(self):
+        message_box = messagebox.askyesno('Delete All', 'Are you sure?')
+        if message_box:
+            while len(self.goal_list) != 0:
+                self.goal_list.clear()
 
 
 class ToDoPage(tk.Frame):
@@ -101,9 +140,6 @@ class ToDoPage(tk.Frame):
         btn_del.place(x=30, y=160)
         btn_del_all.place(x=30, y=200)
         task_listbox.place(x=30, y=240)
-
-        self.retrieve_database()
-        self.update_list()
 
     # Functions for buttons
     # Add tasks to to-do list
@@ -155,11 +191,4 @@ class ToDoPage(tk.Frame):
 if __name__ == "__main__":
     app = StudyApp()
     app.mainloop()
-
-    the_connection = sql.connect('listOfTasks.db')
-    the_cursor = the_connection.cursor()
-    the_cursor.execute('create table if not exists tasks (title text)')
-
-    the_connection.commit()
-    the_cursor.close()
 
