@@ -103,12 +103,12 @@ class GoalPage(tk.Frame):
     def delete_goal(self):
         self.goal_listbox.delete(ANCHOR)
 
-    def delete_all_goals(self):
+       def delete_all_goals(self):
         message_box = messagebox.askyesno('Delete All', 'Are you sure?')
         if message_box:
             while len(self.goal_list) != 0:
                 self.goal_list.clear()
-
+                self.goal_listbox.delete(0, 'end')
 
 class ToDoPage(tk.Frame):
     def __init__(self, parent, controller):
