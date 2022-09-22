@@ -91,24 +91,29 @@ class GoalPage(tk.Frame):
     # Functions for button
 
     # Add tasks to to-do list
+       # Functions for button
+
+    # Add tasks to to-do list
     def add_goal(self):
         task = self.my_entry.get()
-        if task != "":
+        if 5 > len(self.my_entry.get()) > 0:
             self.goal_listbox.insert(END, task)
             self.my_entry.delete(0, 'end')
+        elif len(self.my_entry.get()) > 5:
+            messagebox.showinfo('Error', 'Invalid length, Please consider shortening the length of your goal')
         else:
-            messagebox.showinfo('Error', 'Please enter a goal')
+            if len(self.my_entry.get()) == 0:
+                messagebox.showinfo('Error', 'Please enter a goal')
 
     # Delete task from to-do list
     def delete_goal(self):
         self.goal_listbox.delete(ANCHOR)
 
-       def delete_all_goals(self):
+    def delete_all_goals(self):
         message_box = messagebox.askyesno('Delete All', 'Are you sure?')
         if message_box:
-            while len(self.goal_list) != 0:
-                self.goal_list.clear()
-                self.goal_listbox.delete(0, 'end')
+            self.goal_listbox.delete(0, 'end')
+
 
 class ToDoPage(tk.Frame):
     def __init__(self, parent, controller):
