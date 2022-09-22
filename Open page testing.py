@@ -69,31 +69,27 @@ class GoalPage(tk.Frame):
         btn_exit.place(x=10, y=460)
         self.goal_list = ['Enter you goals here']
 
-        # widgets for goal list
+            # widgets for goal list
         self.my_entry = tk.Entry(self)
 
-        self.goal_listbox = tk.Listbox(self, width=25, height=10, activestyle='none')
+        self.short_term_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light blue', selectbackground='powder blue')
+        self.long_term_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='purple1', selectbackground='powder blue')
 
         btn_add = tk.Button(self, text='Add Goal', command=self.add_goal)
         btn_del = tk.Button(self, text='Delete', command=self.delete_goal)
         btn_del_all = tk.Button(self, text='Delete All Goals', command=self.delete_all_goals)
 
         # setting position of the widgets in app
-        btn_add.place(x=30, y=120)
-        btn_del.place(x=30, y=160)
-        btn_del_all.place(x=30, y=200)
-        self.goal_listbox.place(x=145, y=130)
+        btn_add.place(x=50, y=350)
+        btn_del.place(x=150, y=350)
+        btn_del_all.place(x=225, y=350)
+        self.short_term_listbox.place(x=200, y=130)
+        self.long_term_listbox.place(x=50, y=130)
         self.my_entry.pack(pady=20)
-
-        for goal in self.goal_list:
-            self.goal_listbox.insert(END, goal)
 
     # Functions for button
 
     # Add tasks to to-do list
-       # Functions for button
-
-       # Add tasks to to-do list
     def add_goal(self):
         task = self.my_entry.get()
         if 5 > len(self.my_entry.get()) > 0:
