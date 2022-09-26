@@ -88,39 +88,35 @@ class GoalPage(tk.Frame):
         self.my_entry.pack(pady=20)
 
     # Functions for button
-    def goal_choice(self):
-        self.choice = Toplevel(self)
-        self.choice_entry = tk.Entry(self.choice)
-        self.choice_entry.pack()
-        self.choice.title('Please choose the type of goal')
-        self.choice.geometry('200x200')
-        btn_add_short = tk.Button(self.choice, text='Short Term', command=self.add_short_goal())
-        btn_add_short.place(x=10, y=50)
-        btn_add_long = tk.Button(self.choice, text='Long Term', command=self.add_long_goal())
-        btn_add_long.place(x=10, y=80)
+       def goal_choice(self):
+        if 5 > len(self.my_entry.get()) > 0:
+            self.choice = Toplevel(self)
+            self.choice.title('Please choose the type of goal')
+            self.choice.geometry('200x200')
+            btn_short = tk.Button(self.choice, text='Short Term', command=self.add_short_goal)
+            btn_short.place(x=10, y=50)
+            btn_long = tk.Button(self.choice, text='Long Term', command=self.add_long_goal)
+            btn_long.place(x=10, y=80)
+        elif len(self.my_entry.get()) > 5:
+            messagebox.showinfo('Too long', 'Please consider shortening the length of your goal')
+        else:
+            if len(self.my_entry.get()) == "":
+                messagebox.showwarning('No input entered', 'Please enter a goal')
+
+
 
     # Add tasks to to-do list
     def add_short_goal(self):
         task = self.my_entry.get()
-        if 5 > len(self.my_entry.get()) > 0:
-            self.short_term_listbox.insert(END, task)
-            self.my_entry.delete(0, 'end')
-        elif len(self.my_entry.get()) > 5:
-            messagebox.showinfo('Invalid length', 'Please consider shortening the length of your goal')
-        else:
-            if len(self.my_entry.get()) == "":
-                messagebox.showwarning('No input entered', 'Please enter a goal')
+        self.short_term_listbox.insert(END, task)
+        self.my_entry.delete(0, 'end')
+
 
     def add_long_goal(self):
         task = self.my_entry.get()
-        if 5 > len(self.my_entry.get()) > 0:
-            self.long_term_listbox.insert(END, task)
-            self.my_entry.delete(0, 'end')
-        elif len(self.my_entry.get()) > 5:
-            messagebox.showinfo('Invalid length', 'Please consider shortening the length of your goal')
-        else:
-            if len(self.my_entry.get()) == "":
-                messagebox.showwarning('No input entered', 'Please enter a goal')
+        self.long_term_listbox.insert(END, task)
+        self.my_entry.delete(0, 'end')
+
 
     # Delete task from to-do list
     def delete_goal(self):
