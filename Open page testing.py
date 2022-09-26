@@ -31,7 +31,7 @@ class StudyApp(tk.Tk):
             frame = F(container, self)
             self.frames[F] = frame
 
-            # put all of the pages in the same location;
+            # put all the pages in the same location;
             # the one on the top of the stacking order
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
@@ -58,26 +58,30 @@ class Main(tk.Frame):
                               command=lambda: controller.show_frame(ToDoPage))
         btn_to_do.pack()
 
+
 class GoalPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Your Goals", font=('MS Sans Serif', 10, 'bold'))
         label.pack(pady=10, padx=10)
+        short_term_label = tk.Label(self, text="Short Term Goals", font=('MS Sans Serif', 10, 'bold'))
+        short_term_label.place(x=200, y=100)
+        long_term_label = tk.Label(self, text="Long Term Goals", font=('MS Sans Serif', 10, 'bold'))
+        long_term_label.place(x=50, y=100)
         btn_exit = tk.Button(self, text="Back to Main Page",
                              command=lambda: controller.show_frame(Main))
         btn_exit.place(x=10, y=460)
-        self.goal_list = []
 
         # widgets for goal list
         self.my_entry = tk.Entry(self)
         self.short_term_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light blue',
                                              selectbackground='powder blue')
-        self.long_term_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light yellow',
+        self.long_term_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light blue',
                                             selectbackground='powder blue')
 
         btn_add = tk.Button(self, text='Add Goal', command=self.goal_choice)
-        btn_del = tk.Button(self, text='Delete', command=self.delete_goal)
-        btn_del_all = tk.Button(self, text='Delete All Goals', command=self.delete_all_goals)
+        btn_del = tk.Button(self, text='Delete \n Goal', command=self.delete_goal)
+        btn_del_all = tk.Button(self, text='Delete All \n Short Term Goals', command=self.delete_all_goals)
 
         # setting position of the widgets in app
         btn_add.place(x=50, y=350)
@@ -87,23 +91,25 @@ class GoalPage(tk.Frame):
         self.long_term_listbox.place(x=50, y=130)
         self.my_entry.pack(pady=20)
 
-    # Functions for button
-        def goal_choice(self):
-          if 2 >= len(self.my_entry.get()) > 0:
+    # Functions
+
+    # Add goals to short-term or long-term list box depending on user action and input
+    def goal_choice(self):
+        if 5 >= len(self.my_entry.get()) > 0:
             self.choice = Toplevel(self)
-            self.choice.title('Please choose the type of goal')
-            self.choice.geometry('200x200')
+            choice_label = tk.Label(self.choice, text='Please choose the \n type of goal',
+                                    font=('MS Sans Serif', 8, 'bold'))
+            choice_label.pack(side=TOP)
+            self.choice.geometry('150x150')
             btn_short = tk.Button(self.choice, text='Short Term', command=self.add_short_goal)
-            btn_short.place(x=10, y=50)
+            btn_short.place(x=50, y=50)
             btn_long = tk.Button(self.choice, text='Long Term', command=self.add_long_goal)
-            btn_long.place(x=10, y=80)
-          elif len(self.my_entry.get()) > 2:
+            btn_long.place(x=50, y=100)
+        elif len(self.my_entry.get()) > 5:
             messagebox.showinfo('Too long', 'Please consider shortening the length of your goal')
-          else:
+        else:
             if len(self.my_entry.get()) == "":
                 messagebox.showwarning('No input entered', 'Please enter a goal')
-
-    # Add tasks to to-do list
 
     def add_short_goal(self):
         task = self.my_entry.get()
@@ -113,21 +119,21 @@ class GoalPage(tk.Frame):
 
     def add_long_goal(self):
         task = self.my_entry.get()
-        self.long_term_listbox.insert(END, task)
+        self.long_term_listbox.insert('end', task)
         self.my_entry.delete(0, 'end')
         self.choice.destroy()
 
-
-    # Delete task from to-do list
     def delete_goal(self):
-        self.goal_listbox.delete(ANCHOR)
+        self.short_term_listbox.delete(ANCHOR)
+        self.long_term_listbox.delete(ANCHOR)
 
+    # Delete all goals from short term goal listbox once user has confirmed deletion
     def delete_all_goals(self):
-        message_box = messagebox.askyesno('Delete All', 'Are you sure?')
-        if message_box:
-            self.short_term_listbox.delete(0, 'end')
-        else:
-            pass
+        size = self.short_term_listbox.size()
+        if size != 0:
+            message_box = messagebox.askyesno('Delete Short Term Goals', 'Are you sure?')
+            if message_box:
+                self.short_term_listbox.delete(0, 'end')
 
 
 class ToDoPage(tk.Frame):
@@ -141,71 +147,56 @@ class ToDoPage(tk.Frame):
         btn_exit.place(x=10, y=460)
 
         # widgets for to do list
-        task_label = tk.Label(self, text='Enter the Task')
-        task_label.place(x=0, y=0)
-
-        task_field = tk.Entry(self, width=18)
-        task_field.place(x=30, y=30)
+        self.my_entry = tk.Entry(self)
+        self.to_do_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light blue',
+                                        selectbackground='powder blue')
+        self.long_term_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light blue',
+                                            selectbackground='powder blue')
 
         btn_add = tk.Button(self, text='Add Task', command=self.add_task)
-        btn_del = tk.Button(self, text='Delete', command=self.delete_task)
-        btn_del_all = tk.Button(self, text='Delete All Tasks', command=self.delete_all_tasks)
+        btn_del = tk.Button(self, text='Delete \n Task', command=self.delete_task)
+        btn_del_all = tk.Button(self, text='Delete All \n Tasks', command=self.delete_all_tasks)
+        btn_mark = tk.Button(self, text='Mark as \n completed', command=self.mark_completed)
 
-        self.tasks = []
+        # setting position of the widgets in app
+        btn_add.place(x=50, y=350)
+        btn_del.place(x=150, y=350)
+        btn_del_all.place(x=225, y=350)
+        btn_mark.place(x=50, y=450)
+        self.to_do_listbox.place(x=120, y=130)
+        self.my_entry.place(x=100, y=50, width=150, height=50)
 
-        task_listbox = tk.Listbox(self, width=26, height=13)
+    # Functions
 
-        # setting position of the widgets in app using place() method
-        btn_add.place(x=30, y=120)
-        btn_del.place(x=30, y=160)
-        btn_del_all.place(x=30, y=200)
-        task_listbox.place(x=30, y=240)
-
-    # Functions for buttons
-    # Add tasks to to-do list
-    def add_task(self, the_cursor=None):
-        task_string = self.task_field.get()
-        if len(task_string) == 0:
-            messagebox.showinfo('Error', 'Please enter a task')
+    # Add tasks to to-do list depending on user-input
+    def add_task(self):
+        task = self.my_entry.get()
+        if 5 >= len(self.my_entry.get()) > 0:
+            self.to_do_listbox.insert(END, task)
+            self.my_entry.delete(0, 'end')
+        elif len(self.my_entry.get()) > 5:
+            messagebox.showinfo('Too long', 'Please consider shortening the length of your task')
         else:
-            self.tasks.append(task_string)
-            the_cursor.execute('insert into tasks values (?)', (task_string,))
-            self.update_list()
-            self.task_field.delete(0, 'end')
+            if len(self.my_entry.get()) == "":
+                messagebox.showwarning('No input entered', 'Please enter a task')
 
-    # Update task list
-    def update_list(self):
-        self.clear_list()
-        for task in self.tasks:
-            self.task_listbox.insert('end', task)
+    def delete_task(self):
+        self.to_do_listbox.delete(ANCHOR)
 
-    # Delete task from to-do list
-    def delete_task(self, the_cursor=None):
-        try:
-            the_value = self.task_listbox.get(self.task_listbox.curselection())
-            if the_value in self.tasks:
-                self.tasks.remove(the_value)
-                self.update_list()
-                the_cursor.execute('delete from tasks where title = ?', (the_value,))
-        except:
-            messagebox.showinfo('Error', 'No Task Selected. Cannot Delete')
+    # Delete all tasks in task listbox once user has confirmed
+    def delete_all_tasks(self):
+        size = self.to_do_listbox.size()
+        if size != 0:
+            message_box = messagebox.askyesno('Delete All Tasks', 'Are you sure?')
+            if message_box:
+                self.to_do_listbox.delete(0, 'end')
 
-    def delete_all_tasks(self, the_cursor=None):
-        message_box = messagebox.askyesno('Delete All', 'Are you sure?')
-        if message_box:
-            while len(self.tasks) != 0:
-                self.tasks.pop()
-            the_cursor.execute('delete from tasks')
-            self.update_list()
-
-    def clear_list(self):
-        self.task_listbox.delete(0, 'end')
-
-    def retrieve_database(self, the_cursor=None):
-        while len(self.tasks) != 0:
-            self.tasks.pop()
-        for row in the_cursor.execute('select title from tasks'):
-            self.tasks.append(row[0])
+    def mark_completed(self):
+        marked = self.to_do_listbox.curselection()
+        temp = marked[0]
+        temp_marked = self.to_do_listbox.get(marked)
+        temp_marked = temp_marked+" ✔"
+        self.to_do_listbox.insert(temp, temp_marked)
 
 
 if __name__ == "__main__":
