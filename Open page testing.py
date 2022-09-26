@@ -88,8 +88,8 @@ class GoalPage(tk.Frame):
         self.my_entry.pack(pady=20)
 
     # Functions for button
-       def goal_choice(self):
-        if 2 >= len(self.my_entry.get()) > 0:
+        def goal_choice(self):
+          if 2 >= len(self.my_entry.get()) > 0:
             self.choice = Toplevel(self)
             self.choice.title('Please choose the type of goal')
             self.choice.geometry('200x200')
@@ -97,26 +97,25 @@ class GoalPage(tk.Frame):
             btn_short.place(x=10, y=50)
             btn_long = tk.Button(self.choice, text='Long Term', command=self.add_long_goal)
             btn_long.place(x=10, y=80)
-        elif len(self.my_entry.get()) > 2:
+          elif len(self.my_entry.get()) > 2:
             messagebox.showinfo('Too long', 'Please consider shortening the length of your goal')
-        else:
+          else:
             if len(self.my_entry.get()) == "":
                 messagebox.showwarning('No input entered', 'Please enter a goal')
 
-
-
-
     # Add tasks to to-do list
+
     def add_short_goal(self):
         task = self.my_entry.get()
         self.short_term_listbox.insert(END, task)
         self.my_entry.delete(0, 'end')
-
+        self.choice.destroy()
 
     def add_long_goal(self):
         task = self.my_entry.get()
         self.long_term_listbox.insert(END, task)
         self.my_entry.delete(0, 'end')
+        self.choice.destroy()
 
 
     # Delete task from to-do list
