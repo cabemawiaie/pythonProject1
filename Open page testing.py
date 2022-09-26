@@ -89,7 +89,7 @@ class GoalPage(tk.Frame):
 
     # Functions for button
        def goal_choice(self):
-        if 5 > len(self.my_entry.get()) > 0:
+        if 2 >= len(self.my_entry.get()) > 0:
             self.choice = Toplevel(self)
             self.choice.title('Please choose the type of goal')
             self.choice.geometry('200x200')
@@ -97,11 +97,12 @@ class GoalPage(tk.Frame):
             btn_short.place(x=10, y=50)
             btn_long = tk.Button(self.choice, text='Long Term', command=self.add_long_goal)
             btn_long.place(x=10, y=80)
-        elif len(self.my_entry.get()) > 5:
+        elif len(self.my_entry.get()) > 2:
             messagebox.showinfo('Too long', 'Please consider shortening the length of your goal')
         else:
             if len(self.my_entry.get()) == "":
                 messagebox.showwarning('No input entered', 'Please enter a goal')
+
 
 
 
