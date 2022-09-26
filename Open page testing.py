@@ -93,13 +93,11 @@ class GoalPage(tk.Frame):
         self.choice_entry = tk.Entry(self.choice)
         self.choice_entry.pack()
         self.choice.title('Please choose the type of goal')
-        self.choice.geometry('100x100')
-        if self.choice_entry == "short term":
-           self.add_short_goal()
-        elif self.choice_entry == "long term":
-            self.add_long_goal()
-        else:
-            messagebox.showerror('Invalid Input', 'Enter either short term or long term')
+        self.choice.geometry('200x200')
+        btn_add_short = tk.Button(self.choice, text='Short Term', command=self.add_short_goal())
+        btn_add_short.place(x=10, y=50)
+        btn_add_long = tk.Button(self.choice, text='Long Term', command=self.add_long_goal())
+        btn_add_long.place(x=10, y=80)
 
     # Add tasks to to-do list
     def add_short_goal(self):
