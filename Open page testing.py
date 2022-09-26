@@ -58,23 +58,22 @@ class Main(tk.Frame):
                               command=lambda: controller.show_frame(ToDoPage))
         btn_to_do.pack()
 
-
 class GoalPage(tk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent, height=500, width=350)
+        tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Your Goals", font=('MS Sans Serif', 10, 'bold'))
         label.pack(pady=10, padx=10)
         btn_exit = tk.Button(self, text="Back to Main Page",
                              command=lambda: controller.show_frame(Main))
         btn_exit.place(x=10, y=460)
-        self.goal_list = ['Enter you goals here']
- # widgets for goal list
-        self.my_entry = tk.Entry(self)
+        self.goal_list = []
 
+        # widgets for goal list
+        self.my_entry = tk.Entry(self)
         self.short_term_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light blue',
-                                        selectbackground='powder blue')
+                                             selectbackground='powder blue')
         self.long_term_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light yellow',
-                                       selectbackground='powder blue')
+                                            selectbackground='powder blue')
 
         btn_add = tk.Button(self, text='Add Goal', command=self.goal_choice)
         btn_del = tk.Button(self, text='Delete', command=self.delete_goal)
@@ -90,49 +89,51 @@ class GoalPage(tk.Frame):
 
     # Functions for button
     def goal_choice(self):
-        win = Toplevel(self)
-        win.title('Please choose the type of goal')
-        win.geometry('100x100')
-        btn_short_term = tk.Button(Toplevel, text='Short Term Goal', command=self.add_short_goal())
-        btn_long_term = tk.Button(Toplevel, text='Long Term Goal', command=self.add_long_goal())
-        btn_long_term.pack()
-        btn_short_term.pack()
+        self.choice = Toplevel(self)
+        self.choice_entry = tk.Entry(self.choice)
+        self.choice_entry.pack()
+        self.choice.title('Please choose the type of goal')
+        self.choice.geometry('100x100')
+        if self.choice_entry == "short term":
+           self.add_short_goal()
+        elif self.choice_entry == "long term":
+            self.add_long_goal()
+        else:
+            messagebox.showerror('Invalid Input', 'Enter either short term or long term')
 
     # Add tasks to to-do list
     def add_short_goal(self):
-        task = my_entry.get()
-        if 5 > len(my_entry.get()) > 0:
-            short_term_listbox.insert(END, task)
-            my_entry.delete(0, 'end')
-        elif len(my_entry.get()) > 5:
+        task = self.my_entry.get()
+        if 5 > len(self.my_entry.get()) > 0:
+            self.short_term_listbox.insert(END, task)
+            self.my_entry.delete(0, 'end')
+        elif len(self.my_entry.get()) > 5:
             messagebox.showinfo('Invalid length', 'Please consider shortening the length of your goal')
         else:
-            if len(my_entry.get()) == 0:
+            if len(self.my_entry.get()) == "":
                 messagebox.showwarning('No input entered', 'Please enter a goal')
 
     def add_long_goal(self):
-        task = my_entry.get()
-        if 5 > len(my_entry.get()) > 0:
-            long_term_listbox.insert(END, task)
-            my_entry.delete(0, 'end')
-        elif len(my_entry.get()) > 5:
+        task = self.my_entry.get()
+        if 5 > len(self.my_entry.get()) > 0:
+            self.long_term_listbox.insert(END, task)
+            self.my_entry.delete(0, 'end')
+        elif len(self.my_entry.get()) > 5:
             messagebox.showinfo('Invalid length', 'Please consider shortening the length of your goal')
         else:
-            if len(my_entry.get()) == 0:
+            if len(self.my_entry.get()) == "":
                 messagebox.showwarning('No input entered', 'Please enter a goal')
 
     # Delete task from to-do list
     def delete_goal(self):
-        goal_listbox.delete(ANCHOR)
+        self.goal_listbox.delete(ANCHOR)
 
     def delete_all_goals(self):
         message_box = messagebox.askyesno('Delete All', 'Are you sure?')
         if message_box:
-            short_term_listbox.delete(0, 'end')
+            self.short_term_listbox.delete(0, 'end')
         else:
             pass
-
-
 
 
 class ToDoPage(tk.Frame):
@@ -216,4 +217,3 @@ class ToDoPage(tk.Frame):
 if __name__ == "__main__":
     app = StudyApp()
     app.mainloop()
-
