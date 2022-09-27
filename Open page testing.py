@@ -101,9 +101,9 @@ class GoalPage(tk.Frame):
                                     font=('MS Sans Serif', 8, 'bold'))
             choice_label.pack(side=TOP)
             self.choice.geometry('150x150')
-            btn_short = tk.Button(self.choice, text='Short Term', command=self.add_short_goal)
+            btn_short = tk.Radiobutton(self.choice, text='Short Term', command=self.add_short_goal)
             btn_short.place(x=50, y=50)
-            btn_long = tk.Button(self.choice, text='Long Term', command=self.add_long_goal)
+            btn_long = tk.Radiobutton(self.choice, text='Long Term', command=self.add_long_goal)
             btn_long.place(x=50, y=100)
         elif len(self.my_entry.get()) > 5:
             messagebox.showinfo('Too long', 'Please consider shortening the length of your goal')
