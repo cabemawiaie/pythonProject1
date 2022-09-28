@@ -13,7 +13,7 @@ class StudyApp(tk.Tk):
         height = 500
 
         self.geometry(f'{width}x{height}')
-        self.minsize(350, 500)
+        self.minsize(width, height)
         self.title('My Study Planner')
 
         # the container is where we'll stack a bunch of frames
@@ -47,33 +47,21 @@ class Main(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.parent = parent
-        label = tk.Label(self, text="Main Page", font=('MS Sans Serif', 10, 'bold'))
+        label = tk.Label(self, text="Main Page", font=('MS Sans Serif', 12, 'bold'))
         label.pack(padx=10, pady=10)
+
+        welcome_msg = "Welcome to My Study Planner \n To create your short/long term goal lists, click Goals \n " \
+                      "To create your school and extracurricular to do lists, click To Do List"
+        welcome_label = tk.Label(self, text=welcome_msg, font=('MS Sans Serif', 8))
+        welcome_label.pack(padx=10, pady=10)
 
         # Buttons
         btn_goals = tk.Button(self, text="Goals", padx=5, pady=5, command=lambda: controller.show_frame(GoalPage))
-        btn_goals.pack()
+        btn_goals.pack(padx=5, pady=5)
 
         btn_to_do = tk.Button(self, text="To Do List",
                               command=lambda: controller.show_frame(ToDoPage))
-        btn_to_do.pack()
-
-
-
-class Main(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.parent = parent
-        label = tk.Label(self, text="Main Page", font=('MS Sans Serif', 10, 'bold'))
-        label.pack(padx=10, pady=10)
-
-        # Buttons
-        btn_goals = tk.Button(self, text="Goals", padx=5, pady=5, command=lambda: controller.show_frame(GoalPage))
-        btn_goals.pack()
-
-        btn_to_do = tk.Button(self, text="To Do List",
-                              command=lambda: controller.show_frame(ToDoPage))
-        btn_to_do.pack()
+        btn_to_do.pack(padx=5, pady=5)
 
 
 class GoalPage(tk.Frame):
@@ -123,9 +111,9 @@ class GoalPage(tk.Frame):
                                     font=('MS Sans Serif', 8, 'bold'))
             choice_label.pack(side=TOP)
             self.choice.geometry('200x150')
-            btn_short = tk.Button(self.choice, text='Short Term', command=self.add_short_goal)
+            btn_short = tk.Radiobutton(self.choice, text='Short Term', command=self.add_short_goal)
             btn_short.place(x=50, y=50)
-            btn_long = tk.Button(self.choice, text='Long Term', command=self.add_long_goal)
+            btn_long = tk.Radiobutton(self.choice, text='Long Term', command=self.add_long_goal)
             btn_long.place(x=50, y=100)
         elif len(task) > 5:
             messagebox.showinfo('Too long', 'Please consider shortening the length of your goal')
@@ -133,7 +121,7 @@ class GoalPage(tk.Frame):
             if len(task) == 0:
                 messagebox.showwarning('No input entered', 'Please enter a goal')
 
-    def add_long_goal(self, task):
+    def add_long_goal(self):
         task = self.my_entry.get()
         self.long_term_listbox.insert(END, task)
         self.my_entry.delete(0, 'end')
