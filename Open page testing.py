@@ -67,6 +67,8 @@ class Main(tk.Frame):
 class GoalPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.confirm = None
+        self.choice = None
         label = tk.Label(self, text="Your Goals", font=('MS Sans Serif', 12, 'bold'))
         label.pack(pady=10, padx=10)
         short_term_label = tk.Label(self, text="Short Term Goals", font=('MS Sans Serif', 10, 'bold'))
@@ -101,10 +103,19 @@ class GoalPage(tk.Frame):
         self.my_entry.place(x=125, y=65)
 
     # Functions
+    def confirmation(self):
+        task = self.my_entry.get()
+        message_box = messagebox.askyesno('Confirm addition of goal', f'Are you sure you would like to add "{task}" to your goal list')
+        if message_box:
+            return True
+        else:
+            return False
 
     # Add goals to short-term or long-term list box depending on user action and input
+
     def goal_choice(self):
         task = self.my_entry.get()
+
         if 5 >= len(task) > 0:
             self.choice = Toplevel(self)
             choice_label = tk.Label(self.choice, text='Please choose the \n type of goal',
@@ -122,16 +133,22 @@ class GoalPage(tk.Frame):
                 messagebox.showwarning('No input entered', 'Please enter a goal')
 
     def add_long_goal(self):
-        task = self.my_entry.get()
-        self.long_term_listbox.insert(END, task)
-        self.my_entry.delete(0, 'end')
-        self.choice.destroy()
+        if self.confirmation():
+            task = self.my_entry.get()
+            self.long_term_listbox.insert(END, task)
+            self.my_entry.delete(0, 'end')
+            self.choice.destroy()
+        else:
+            pass
 
     def add_short_goal(self):
-        task = self.my_entry.get()
-        self.short_term_listbox.insert('end', task)
-        self.my_entry.delete(0, 'end')
-        self.choice.destroy()
+        if self.confirmation():
+            task = self.my_entry.get()
+            self.short_term_listbox.insert('end', task)
+            self.my_entry.delete(0, 'end')
+            self.choice.destroy()
+        else:
+            pass
 
     def delete_goal(self):
         self.short_term_listbox.delete(ANCHOR)
@@ -144,9 +161,6 @@ class GoalPage(tk.Frame):
             message_box = messagebox.askyesno('Delete Short Term Goals', 'Are you sure?')
             if message_box:
                 self.short_term_listbox.delete(0, 'end')
-
-
-
 
 class ToDoPage(tk.Frame):
     def __init__(self, parent, controller):
