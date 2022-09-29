@@ -175,15 +175,15 @@ class ToDoPage(tk.Frame):
 
         # To Do Page Labels
         title_label = tk.Label(self, text="To Do List", font=('MS Sans Serif', 12, 'bold'))
-        academic_label = tk.Label(self, text="Academic Tasks", font=('MS Sans Serif', 10, 'bold'))
-        extra_label = tk.Label(self, text="Extracurricular Tasks", font=('MS Sans Serif', 10, 'bold'))
+        academic_label = tk.Label(self, text="Academic \n To Do List", font=('MS Sans Serif', 10, 'bold'))
+        extra_label = tk.Label(self, text="Extracurricular \n To Do List", font=('MS Sans Serif', 10, 'bold'))
         entry_label = tk.Label(self, text="Enter Task:", font=('MS Sans Serif', 10))
 
         # Setting positions for labels in to do frame
         title_label.pack(pady=10, padx=10)
-        academic_label.place(x=50, y=100)
+        academic_label.place(x=70, y=100)
         extra_label.place(x=200, y=100)
-        entry_label.place(x=50, y=65)
+        entry_label.place(x=40, y=65)
 
         # widgets for to do list
         btn_exit = tk.Button(self, text="Back to Main Page",
@@ -204,8 +204,8 @@ class ToDoPage(tk.Frame):
         btn_del_all.place(x=225, y=350)
         btn_exit.place(x=10, y=460)
 
-        self.academic_listbox.place(x=50, y=130)
-        self.extra_listbox.place(x=200, y=130)
+        self.academic_listbox.place(x=50, y=140)
+        self.extra_listbox.place(x=200, y=140)
         self.my_entry.place(x=125, y=65, width=150, height=25)
 
     # Functions
@@ -268,13 +268,13 @@ class ToDoPage(tk.Frame):
         self.choice.geometry('200x150')
 
         choice_label = tk.Label(self.choice,
-                                text='Would you like to delete all academic tasks or extracurricular tasks?',
-                                font=('MS Sans Serif', 8, 'bold'))
+                                text='Would you like to delete all \n academic tasks or extracurricular tasks?',
+                                font=('MS Sans Serif', 9))
         btn_del_academic = tk.Radiobutton(self.choice, text='Academic Tasks',
                                           state='normal',
                                           command=self.delete_academic_tasks)
         btn_del_extra = tk.Radiobutton(self.choice, text='Extracurricular tasks',
-                                       state='normal',
+                                       state='active',
                                        command=self.delete_extra_tasks)
 
         choice_label.pack(side=TOP)
@@ -307,3 +307,4 @@ class ToDoPage(tk.Frame):
 if __name__ == "__main__":
     app = StudyApp()
     app.mainloop()
+
