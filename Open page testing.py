@@ -97,8 +97,8 @@ class GoalPage(tk.Frame):
         btn_del_all.place(x=220, y=360)
         btn_exit.place(x=15, y=450)
 
-        self.long_term_listbox.place(x=40, y=170)
-        self.short_term_listbox.place(x=180, y=170)
+        self.academic_listbox.place(x=40, y=170)
+        self.extra_listbox.place(x=180, y=170)
         self.my_entry.place(x=125, y=65)
 
     # Functions
