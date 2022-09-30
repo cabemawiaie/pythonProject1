@@ -4,7 +4,6 @@ from tkinter import *
 from tkinter import messagebox
 
 
-# need to explain class
 class StudyApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -12,13 +11,10 @@ class StudyApp(tk.Tk):
         width = 350
         height = 500
 
-        self.geometry(f'{width}x{height}')
         self.minsize(width, height)
-        self.title('My Study Planner')
+        self.title('My Life Planner')
 
-        # the container is where we'll stack a bunch of frames
-        # on top of each other, then the one we want visible
-        # will be raised above the others
+        # creating container
         container = tk.Frame(self, width=350, height=500)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
@@ -30,15 +26,11 @@ class StudyApp(tk.Tk):
         for F in (Main, GoalPage, ToDoPage):
             frame = F(container, self)
             self.frames[F] = frame
-
-            # put all the pages in the same location;
-            # the one on the top of the stacking order
-            # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
-        self.show_frame(Main)
+            self.show_frame(Main)
 
+    #  Show window for the given page name
     def show_frame(self, cont):
-        # Show window for the given page name
         frame = self.frames[cont]
         frame.tkraise()
 
@@ -50,18 +42,18 @@ class Main(tk.Frame):
         label = tk.Label(self, text="Main Page", font=('MS Sans Serif', 12, 'bold'))
         label.pack(padx=10, pady=10)
 
-        welcome_msg = "Welcome to My Study Planner \n To create your short/long term goal lists, click Goals \n " \
-                      "To create your school and extracurricular to do lists, click To Do List"
-        welcome_label = tk.Label(self, text=welcome_msg, font=('MS Sans Serif', 8))
+        welcome_msg = "Welcome to My Study Planner \n To create your short and long term goal lists, " \
+                      "\n click Goals \n To create your school and extracurricular to do lists,\n click To Do List"
+        welcome_label = tk.Label(self, text=welcome_msg, font=('MS Sans Serif', 10))
         welcome_label.pack(padx=10, pady=10)
 
         # Buttons
-        btn_goals = tk.Button(self, text="Goals", padx=5, pady=5, command=lambda: controller.show_frame(GoalPage))
-        btn_goals.pack(padx=5, pady=5)
-
-        btn_to_do = tk.Button(self, text="To Do List",
+        btn_goals = tk.Button(self, text="Goals", bg='white', width=10, height=2, font=('MS Sans Serif', 8),
+                              command=lambda: controller.show_frame(GoalPage))
+        btn_to_do = tk.Button(self, text="To Do List", bg='white', width=10, height=2, font=('MS Sans Serif', 8),
                               command=lambda: controller.show_frame(ToDoPage))
-        btn_to_do.pack(padx=5, pady=5)
+        btn_to_do.pack(padx=5, pady=10)
+        btn_goals.pack(padx=5, pady=10)
 
 
 class GoalPage(tk.Frame):
@@ -72,40 +64,46 @@ class GoalPage(tk.Frame):
         self.choice = None
 
         # Goal page labels
-        label = tk.Label(self, text="Your Goals", font=('MS Sans Serif', 12, 'bold'))
-        short_term_label = tk.Label(self, text="Short Term Goals", font=('MS Sans Serif', 10, 'bold'))
-        long_term_label = tk.Label(self, text="Long Term Goals", font=('MS Sans Serif', 10, 'bold'))
+        title_label = tk.Label(self, text="Your Goals", font=('MS Sans Serif', 12, 'bold'))
+        short_term_label = tk.Label(self, text="Short Term \n Goals", font=('MS Sans Serif', 10, 'bold'))
+        long_term_label = tk.Label(self, text="Long Term \n Goals", font=('MS Sans Serif', 10, 'bold'))
         entry_label = tk.Label(self, text="Enter goal:", font=('MS Sans Serif', 10))
 
-        label.pack(pady=10, padx=10)
-        short_term_label.place(x=50, y=100)
-        long_term_label.place(x=200, y=100)
+        title_label.pack(pady=10, padx=10)
+        short_term_label.place(x=60, y=120)
+        long_term_label.place(x=200, y=120)
         entry_label.place(x=50, y=65)
 
         # widgets for goal list
         self.my_entry = tk.Entry(self)
-
-        self.short_term_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light blue',
+        self.short_term_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light steel blue1',
                                              selectbackground='powder blue')
-        self.long_term_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light blue',
+        self.long_term_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light steel blue1',
                                             selectbackground='powder blue')
 
         btn_add = tk.Button(self, text='Add Goal', command=self.goal_choice)
         btn_del = tk.Button(self, text='Delete \n Goal', command=self.delete_goal)
         btn_del_all = tk.Button(self, text='Delete All \n Short Term Goals', command=self.delete_all_goals)
-        btn_exit = tk.Button(self, text="Back to Main Page",
+        btn_exit = tk.Button(self, text="Back to \n Main Page", bg='white', font=('MS Sans Serif', 8),
                              command=lambda: controller.show_frame(Main))
 
+        buttons = [btn_del, btn_add, btn_del_all]
+        for btn in buttons:
+            btn.config(width=15, height=2, padx=5, bg='white', font=('MS Sans Serif', 8))
+
         # setting position of the widgets in app
-        btn_add.place(x=50, y=350)
-        btn_del.place(x=150, y=350)
-        btn_del_all.place(x=225, y=350)
-        btn_exit.place(x=10, y=460)
-        self.long_term_listbox.place(x=200, y=130)
-        self.short_term_listbox.place(x=50, y=130)
+        btn_add.place(x=40, y=360)
+        btn_del.place(x=135, y=360)
+        btn_del_all.place(x=220, y=360)
+        btn_exit.place(x=15, y=450)
+
+        self.long_term_listbox.place(x=40, y=170)
+        self.short_term_listbox.place(x=180, y=170)
         self.my_entry.place(x=125, y=65)
 
     # Functions
+
+    #  Confirms that user would like to add goal
     def confirmation(self):
         goal = self.my_entry.get()
         message_box = messagebox.askyesno('Confirm addition of goal',
@@ -115,7 +113,7 @@ class GoalPage(tk.Frame):
         else:
             return False
 
-    # Add goals to short-term or long-term list box depending on user action and input
+    #  Add goals to short-term or long-term list box depending on user action and input
 
     def goal_choice(self):
         goal = self.my_entry.get()
@@ -136,6 +134,7 @@ class GoalPage(tk.Frame):
             if len(goal) == 0:
                 messagebox.showwarning('No input entered', 'Please enter a goal')
 
+    #  Adds goals to to-do list depending on user-input
     def add_long_goal(self):
         if self.confirmation():
             goal = self.my_entry.get()
@@ -158,7 +157,7 @@ class GoalPage(tk.Frame):
         self.short_term_listbox.delete(ANCHOR)
         self.long_term_listbox.delete(ANCHOR)
 
-    # Delete all goals from short term goal listbox once user has confirmed deletion
+    #  Deletes all goals from short term goal listbox once user has confirmed deletion
     def delete_all_goals(self):
         size = self.short_term_listbox.size()
         if size != 0:
@@ -181,31 +180,35 @@ class ToDoPage(tk.Frame):
 
         # Setting positions for labels in to do frame
         title_label.pack(pady=10, padx=10)
-        academic_label.place(x=70, y=100)
-        extra_label.place(x=200, y=100)
+        academic_label.place(x=60, y=120)
+        extra_label.place(x=185, y=120)
         entry_label.place(x=40, y=65)
 
         # widgets for to do list
-        btn_exit = tk.Button(self, text="Back to Main Page",
-                             command=lambda: controller.show_frame(Main))
         self.my_entry = tk.Entry(self)
-        self.academic_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light blue',
+        self.academic_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light steel blue1',
                                            selectbackground='powder blue')
-        self.extra_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light blue',
+        self.extra_listbox = tk.Listbox(self, width=20, height=10, activestyle='none', bg='light steel blue1',
                                         selectbackground='powder blue')
 
         btn_add = tk.Button(self, text='Add Task', command=self.task_type)
         btn_del = tk.Button(self, text='Delete \n Task', command=self.delete_task)
         btn_del_all = tk.Button(self, text='Delete All \n Tasks', command=self.delete_choice)
+        btn_exit = tk.Button(self, text="Back to \n Main Page", bg='white', font=('MS Sans Serif', 8),
+                             command=lambda: controller.show_frame(Main))
+
+        buttons = [btn_del, btn_add, btn_del_all]
+        for btn in buttons:
+            btn.config(width=10, height=2, bg='white', font=('MS Sans Serif', 8))
 
         # setting position of the widgets in to do frame
-        btn_add.place(x=50, y=350)
-        btn_del.place(x=150, y=350)
-        btn_del_all.place(x=225, y=350)
-        btn_exit.place(x=10, y=460)
+        btn_add.place(x=50, y=360)
+        btn_del.place(x=135, y=360)
+        btn_del_all.place(x=220, y=360)
+        btn_exit.place(x=15, y=450)
 
-        self.academic_listbox.place(x=50, y=140)
-        self.extra_listbox.place(x=200, y=140)
+        self.academic_listbox.place(x=40, y=170)
+        self.extra_listbox.place(x=180, y=170)
         self.my_entry.place(x=125, y=65, width=150, height=25)
 
     # Functions
@@ -218,6 +221,7 @@ class ToDoPage(tk.Frame):
         else:
             return False
 
+    #  Add tasks to academic or extracurricular list box depending on user action and input
     def task_type(self):
         task = self.my_entry.get()
         if 5 >= len(task) > 0:
@@ -239,7 +243,7 @@ class ToDoPage(tk.Frame):
             if len(task) == 0:
                 messagebox.showwarning('No input entered', 'Please enter a task')
 
-    # Add tasks to to-do list depending on user-input
+    #  Adds tasks to to-do list depending on user-input
     def add_academic_task(self):
         if self.confirmation():
             task = self.my_entry.get()
@@ -259,10 +263,10 @@ class ToDoPage(tk.Frame):
             pass
 
     def delete_task(self):
-        self.add_extra_task().delete(ANCHOR)
-        self.add_academic_task().delete(ANCHOR)
+        self.extra_listbox.delete(ANCHOR)
+        self.academic_listbox.delete(ANCHOR)
 
-    # Delete all tasks in task listbox once user has confirmed
+    #  Delete all tasks in task listbox once user has confirmed
     def delete_choice(self):
         self.choice = Toplevel(self)
         self.choice.geometry('200x150')
@@ -307,4 +311,7 @@ class ToDoPage(tk.Frame):
 if __name__ == "__main__":
     app = StudyApp()
     app.mainloop()
+
+    
+    
 
