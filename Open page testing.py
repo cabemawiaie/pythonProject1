@@ -97,8 +97,8 @@ class GoalPage(tk.Frame):
         btn_del_all.place(x=220, y=360)
         btn_exit.place(x=15, y=450)
 
-        self.academic_listbox.place(x=40, y=170)
-        self.extra_listbox.place(x=180, y=170)
+        self.long_term_listbox.place(x=180, y=170)
+        self.short_term_listbox.place(x=40, y=170)
         self.my_entry.place(x=125, y=65)
 
     # Functions
@@ -117,7 +117,6 @@ class GoalPage(tk.Frame):
 
     def goal_choice(self):
         goal = self.my_entry.get()
-
         if 5 >= len(goal) > 0:
             self.choice = Toplevel(self)
             choice_label = tk.Label(self.choice, text='Please choose the \n type of goal',
@@ -312,6 +311,5 @@ if __name__ == "__main__":
     app = StudyApp()
     app.mainloop()
 
-    
-    
+
 
